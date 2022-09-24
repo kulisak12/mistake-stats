@@ -7,13 +7,13 @@ BIG_MISTAKE_THRESHOLD = 3.0
 
 
 class Competitor:
-    relative_splits: List[float]
-    z_scores: List[float]
 
     def __init__(self, splits: List[int]) -> None:
         self.splits = splits
         self.total_time = sum(splits)
         self.adjustment_factor = 1.0
+        self.relative_splits: List[float] = []
+        self.z_scores: List[float] = []
 
 
 class Course:
@@ -41,14 +41,14 @@ class Course:
                 adjusted_splits, threshold_low=TOO_FAST_THRESHOLD
             ))
             for c, split in zip(self.competitors, adjusted_splits):
-                c.relative_splits[i] = split / best_split
+                c.relative_splits.append(split / best_split)
 
     def calculate_z_scores(self) -> None:
         for i in range(self.num_splits):
             relative_splits = [c.relative_splits[i] for c in self.competitors]
             z_scores = z_score(relative_splits)
             for c, z in zip(self.competitors, z_scores):
-                c.z_scores[i] = z
+                c.z_scores.append(z)
 
 
 def z_score(data: List[float]) -> List[float]:

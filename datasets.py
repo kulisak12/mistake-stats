@@ -40,7 +40,9 @@ def parse_splits(data: dict) -> Optional[Course]:
     if len(data) == 0:
         return None
 
-    num_controls = len(data["Controls"]) - 1  # omit finish
+    num_controls = len(data["Controls"]) - 2  # omit finish and last control
+    if num_controls <= 0:
+        return None
     competitors: List[Competitor] = []
     for competitor in data["Splits"].values():
         parsed = parse_competitor_splits(competitor)
