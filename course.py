@@ -19,7 +19,7 @@ class Competitor:
 class Course:
     def __init__(self, competitors: List[Competitor]) -> None:
         self.competitors = competitors
-        self.num_splits = len(competitors[0].splits)
+        self.num_controls = len(competitors[0].splits)
 
     def set_adjustments(self) -> None:
         """Calculate time adjustment factors.
@@ -33,7 +33,7 @@ class Course:
             c.adjustment_factor = best_time / c.total_time
 
     def set_relative_splits(self) -> None:
-        for i in range(self.num_splits):
+        for i in range(self.num_controls):
             adjusted_splits = [c.splits[i] * c.adjustment_factor for c in self.competitors]
             # because of the adjustments, some times could be too fast
             # don't consider them when calculating the best split
@@ -44,7 +44,7 @@ class Course:
                 c.relative_splits.append(split / best_split)
 
     def calculate_z_scores(self) -> None:
-        for i in range(self.num_splits):
+        for i in range(self.num_controls):
             relative_splits = [c.relative_splits[i] for c in self.competitors]
             z_scores = z_score(relative_splits)
             for c, z in zip(self.competitors, z_scores):
