@@ -1,7 +1,6 @@
 import statistics
 from typing import List
 
-TOO_FAST_THRESHOLD = -3.0
 SMALL_MISTAKE_THRESHOLD = 1.0
 BIG_MISTAKE_THRESHOLD = 3.0
 
@@ -35,11 +34,7 @@ class Course:
     def set_relative_splits(self) -> None:
         for i in range(self.num_controls):
             adjusted_splits = [c.splits[i] * c.adjustment_factor for c in self.competitors]
-            # because of the adjustments, some times could be too fast
-            # don't consider them when calculating the best split
-            best_split = min(remove_outliers(
-                adjusted_splits, threshold_low=TOO_FAST_THRESHOLD
-            ))
+            best_split = min(adjusted_splits)
             for c, split in zip(self.competitors, adjusted_splits):
                 c.relative_splits.append(split / best_split)
 

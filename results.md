@@ -43,9 +43,7 @@ systém, který dle mého rozumně odpovídá skutečnosti.
 
 Předpokládám, že časy závodníků, kteří chybu neudělali, budou odpovídat
 rozdělení s poměrně malým rozptylem. Časy, které jsou o několik směrodatných
-odchylek pomalejší než nejrychlejší dosažený čas, poukazují na chybu. Zvolil
-jsem nejlepší čas místo průměrného proto, že na těžké kontrole může chybu udělat
-většina závodníků.
+odchylek pomalejší než průměrný dosažený čas, poukazují na chybu.
 
 Jak jsem ovšem zmínil na začátku, čas závodníka je určen i rychlostí běhu. Musím
 tedy rozlišit běžeckou ztrátu od ztráty způsobené chybou. Budu předpokládat, že
@@ -56,12 +54,6 @@ pouze z mezičasů detekovat.
 
 Časy tedy normalizuji tak, aby celkový čas na celé trati byl pro každého
 závodníka stejný. Tím se zbavím závislosti na rychlosti běhu.
-
-Ve výjimečných případech se ovšem může stát, že jinak pomalý závodník zaběhne
-jeden z postupů nezvykle rychle, například proto, že kontrolu našel již dříve.
-Normalizace časů způsobí, že by jeho mezičas byl výrazně lepší než ostatní časy.
-Proto před hledáním nejlepšího času nejprve najdu outliers a příliš rychlé časy
-budu ignorovat.
 
 Výše popsané zajišťuje soubor [course.py]().
 
@@ -75,6 +67,5 @@ uvažuji jen své výsledky.
 
 ### Konstanty
 
-V detekci chyb popsané výše musím určit dvě konstanty: hranici příliš rychlých
-časů, které chci ignorovat, a hranici chyby. V obou případech chci použít
-z-score.
+V detekci chyb popsané výše musím určit konstantu, od kdy považuji ztrátu za
+chybu.
