@@ -46,13 +46,19 @@ class Course:
     def calculate_z_scores(self) -> None:
         for i in range(self.num_controls):
             relative_splits = [c.relative_splits[i] for c in self.competitors]
-            z_scores = z_score(relative_splits)
+            z_scores = z_score(relative_splits, mean_override=True)
             for c, z in zip(self.competitors, z_scores):
                 c.z_scores.append(z)
 
 
-def z_score(data: List[float]) -> List[float]:
-    mean = statistics.mean(data)
+def z_score(data: List[float], mean_override=False) -> List[float]:
+    """Calculate z-score for data.
+
+    If mean_override is one, use mean=1.
+    Useful when calculating z-score based on the best time.
+    """
+
+    mean = 1 if mean_override else statistics.mean(data)
     sd = statistics.stdev(data)
     return [(x - mean) / sd for x in data]
 
