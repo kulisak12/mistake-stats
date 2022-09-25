@@ -7,8 +7,9 @@ BIG_MISTAKE_THRESHOLD = 3.0
 
 class Competitor:
 
-    def __init__(self, splits: List[int]) -> None:
+    def __init__(self, splits: List[int], name: str) -> None:
         self.splits = splits
+        self.name = name
         self.total_time = sum(splits)
         self.adjustment_factor = 1.0
         self.relative_splits: List[float] = []

@@ -25,7 +25,7 @@ def load_user_races_dataset(
 
 def parse_splits(data: dict) -> Optional[Course]:
 
-    def parse_competitor_splits(competitor: dict) -> Optional[Competitor]:
+    def parse_competitor_splits(competitor: dict) -> Optional[List[int]]:
         splits: List[int] = []
         for i in range(1, num_controls + 1):
             split_str = competitor.get(f"SplitTime{i}")
@@ -34,7 +34,7 @@ def parse_splits(data: dict) -> Optional[Course]:
                 return None
             split = parse_time(split_str)
             splits.append(split)
-        return Competitor(splits)
+        return splits
 
     # no splits for this race
     if len(data) == 0:
@@ -46,8 +46,9 @@ def parse_splits(data: dict) -> Optional[Course]:
     competitors: List[Competitor] = []
     for competitor in data["Splits"].values():
         parsed = parse_competitor_splits(competitor)
+        name = competitor["ResName"]
         if parsed is not None:
-            competitors.append(parsed)
+            competitors.append(Competitor(parsed, name))
 
     # it does not make sense to calculate mistakes data
     # for only a few competitors is available
