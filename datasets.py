@@ -4,6 +4,7 @@ from course import Competitor, Course
 from typing import Optional, List
 
 DK_ORIS_ID = 40163
+DK_NAME = "Klement David"
 MIN_COMPETITORS = 3
 
 
@@ -47,7 +48,7 @@ def parse_splits(data: dict) -> Optional[Course]:
     competitors: List[Competitor] = []
     for competitor in data["Splits"].values():
         parsed = parse_competitor_splits(competitor)
-        name = competitor["ResName"]
+        name = competitor["ResName"].strip()
         if parsed is not None:
             competitors.append(Competitor(parsed, name))
 

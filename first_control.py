@@ -2,7 +2,7 @@
 import datetime
 from typing import List
 from course import SMALL_MISTAKE_THRESHOLD, BIG_MISTAKE_THRESHOLD
-from datasets import DK_ORIS_ID, load_user_races_dataset
+from datasets import DK_ORIS_ID, DK_NAME, load_user_races_dataset
 
 
 def main():
@@ -13,7 +13,6 @@ def main():
     for course in courses:
         course.set_adjustments()
         course.calculate_losses()
-    max_controls = max(course.num_controls for course in courses)
     mistake_percentages: List[float] = []
 
     competitors = [
@@ -21,6 +20,9 @@ def main():
         for course in courses
         for c in course.competitors
     ]
+    competitors = list(filter(lambda x: x.name == DK_NAME, competitors))
+
+    max_controls = max(len(c.losses) for c in competitors)
     for control in range(max_controls):
         mistakes = 0
         total_splits = 0
@@ -32,6 +34,7 @@ def main():
         mistake_percentages.append(mistakes / total_splits)
 
     print(mistake_percentages)
+
 
 if __name__ == '__main__':
     main()
