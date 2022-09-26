@@ -41,19 +41,32 @@ závodníky totiž nelze rozlišit přirozený rozptyl časů od chyb.
 Není nijak definováno, co chyba je a co není. Pokusil jsem se tedy vytvořit
 systém, který dle mého rozumně odpovídá skutečnosti.
 
-Předpokládám, že časy závodníků, kteří chybu neudělali, budou odpovídat
-rozdělení s poměrně malým rozptylem. Časy, které jsou o několik směrodatných
-odchylek pomalejší než průměrný dosažený čas, poukazují na chybu.
-
-Jak jsem ovšem zmínil na začátku, čas závodníka je určen i rychlostí běhu. Musím
-tedy rozlišit běžeckou ztrátu od ztráty způsobené chybou. Budu předpokládat, že
-běžecká rychlost závodníka v porovnání s ostatními je po celý závod stejná.
+Jak jsem zmínil na začátku, čas závodníka je určen i rychlostí běhu. Prvně tedy
+musím rozlišit běžeckou ztrátu od ztráty způsobené chybou. Budu předpokládat, že
+běžecká rychlost závodníka v poměru s ostatními je po celý závod stejná.
 Tento předpoklad nutně nemusí platit, snadno se může stát, že někdo v úvodu
 závodu přecení své síly a ke konci výrazně zpomalí. Bohužel, toto nejsem schopný
-pouze z mezičasů detekovat.
+pouze na základě mezičasů odlišit od chyb.
 
 Časy tedy normalizuji tak, aby celkový čas na celé trati byl pro každého
 závodníka stejný. Tím se zbavím závislosti na rychlosti běhu.
+
+Následně pro každého závodníka spočítám jeho ztrátu na postupu jako rozdíl jeho
+času a nejlepšího dosaženého času. Pokud ztráta převyšuje určitou mez, prohlásím
+to za chybu.
+
+Otázkou zůstává, jak tuto mez určit. Mez nebude vždy stejná, protože v
+orientačním běhu se závodní v různých disciplínách lišících se délkou. Ztráta 30
+vteřin by v nejdelší disciplíně, na klasické trati, chybu nejspíše neznamenala,
+zatímco ve sprintu se již jedná o hrubou chybu. Dává tedy smysl uvažovat ztrátu
+v poměru k délce závodu.
+
+Rozhodl jsem se zavést dvě třídy chyb:
+- Malé chyby, u kterých ztráta na postupu převyšuje 1/50 délky závodu. To by
+  podle oficiálních směrných časů v kategorii H21 znamenalo 14 s na sprintu, 42
+  s na krátké trati a 90 s na klasické trati.
+- Velké chyby, u kterých ztráta převyšuje 1/20 délky závodu, což odpovídá ztrátě
+  36 s, 105 s, respektive 225 s.
 
 Výše popsané zajišťuje soubor [course.py]().
 
@@ -64,8 +77,3 @@ Využívám data ze všech závodů, kterých jsem se kdy účastnil. Celkem se 
 
 V některých statistikách průměruji všechny závodníky dohromady, v některých
 uvažuji jen své výsledky.
-
-### Konstanty
-
-V detekci chyb popsané výše musím určit konstantu, od kdy považuji ztrátu za
-chybu.
