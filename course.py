@@ -12,6 +12,14 @@ class Competitor:
         self.adjustment_factor = 1.0
         self.losses: List[float] = []
 
+    def made_mistake(self, control: int, threshold: float) -> bool:
+        # if adjustments were used, the loss was already affected by this adjustment
+        # therefore we compute relative loss w.r.t. the adjusted total time
+        # which is equivalent to the best competitor's total time
+        adjusted_total_time = self.total_time * self.adjustment_factor
+        relative_loss = self.losses[control] / adjusted_total_time
+        return relative_loss > threshold
+
 
 class Course:
     def __init__(self, competitors: List[Competitor]) -> None:
