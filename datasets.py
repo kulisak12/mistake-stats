@@ -27,6 +27,7 @@ def parse_splits(data: dict) -> Optional[Course]:
 
     def parse_competitor_splits(competitor: dict) -> Optional[List[int]]:
         splits: List[int] = []
+        # controls indexing is 1-based
         for i in range(1, num_controls + 1):
             split_str = competitor.get(f"SplitTime{i}")
             # skip competitor if some of their splits are missing
