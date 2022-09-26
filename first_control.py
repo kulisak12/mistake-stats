@@ -11,9 +11,7 @@ def main():
         date_to=datetime.date(2022, 8, 31)
     )
     for course in courses:
-        course.set_adjustments()
-        course.set_relative_splits()
-        course.calculate_z_scores()
+        course.calculate_losses()
 
     max_controls = max(course.num_controls for course in courses)
     mistake_splits: List[int] = []
