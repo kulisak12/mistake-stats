@@ -1,12 +1,32 @@
+# Project
+oris-cache/
+
 # Python
 __pycache__/
 .mypy_cache/
 
 # LaTeX
-*.aux
-*.log
-*.out
 *.pdf
-
-# Project
-oris-cache/
+*.acn
+*.acr
+*.alg
+*.aux
+*.bbl
+*.blg
+*.fdb_latexmk
+*.fls
+*.glg
+*.glo
+*.gls
+*.idx
+*.ind
+*.lof
+*.log
+*.lot
+*.nav
+*.out
+*.snm
+*.synctex.g
+*.synctex.gz(busy)
+*.synctex(busy)
+*.toc
