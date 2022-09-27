@@ -46,16 +46,16 @@ def check_hypothesis(
                     num_mistakes[control] += 1
 
     # print mistake percentages
-    print([m / s for m, s in zip(num_mistakes, num_splits)])
+    print(" ".join([f"{m / s:.5f}" for m, s in zip(num_mistakes, num_splits)]))
 
     first_control_mistakes = num_mistakes[0]
     first_control_splits = num_splits[0]
     first_control_p = first_control_mistakes / first_control_splits
-    print(f"{first_control_p=}")
+    print(f"{first_control_p=:.5f}")
     other_control_mistakes = sum(num_mistakes[1:])
     other_control_splits = sum(num_splits[1:])
     other_control_p = other_control_mistakes / other_control_splits
-    print(f"{other_control_p=}")
+    print(f"{other_control_p=:.5f}")
 
     # null hypothesis: mistake probability is always the same
     mistake_probability = sum(num_mistakes) / sum(num_splits)
@@ -63,8 +63,8 @@ def check_hypothesis(
     # test statistic is the difference of means
     difference = first_control_p - other_control_p
     difference_var = var * (1 / first_control_splits + 1 / other_control_splits)
-    p_value = norm.cdf(difference, scale=math.sqrt(difference_var))
-    print(f"{p_value=}")
+    p_value = 1 - norm.cdf(difference, scale=math.sqrt(difference_var))
+    print(f"{p_value=:.5f}")
 
 
 if __name__ == '__main__':
