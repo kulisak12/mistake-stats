@@ -162,4 +162,29 @@ S~výjimkou prvního případu lze nulovou hypotézu vyvrátit. Zdá se tedy, ž
 první kontrole opravdu nastávají chyby častěji. Já zejména bych si dle výsledků
 měl na první kontrolu dávat obzvlášť pozor.
 
+\section*{Hypotéza dvojchyb}
+
+Podobně motivovaná je také hypotéza, že jsou chyby častější v~případě, kdy
+závodník chyboval na předchozí kontrole. Taková chyba závodníka rozhodí a~mnohdy
+vyústí v~další chybu.
+
+Budu tedy hledat podmíněnou pravděpodobnost chyby za předpokladu, že závodník na
+předchozí kontrole chyboval, a~porovnávat ji s~toutéž pravděpodobností za
+předpokladu, že předchozí kontrolu našel \uv{čistě}.
+
+Myslím, že nemá cenu tento test provádět pro velké chyby. Dvě velké chyby za
+sebou se moc často nevidí. Hodnota významnosti tedy budiž $0.05 / 2 = 0.025$.
+
+Nulová hypotéza opět bude, že jsou tyto pravděpodobnosti stejné. Poučen z~minula
+volím náhodné veličiny tak, aby z~jednoho závodu vzešlo jedno měření.
+
+\begin{tabular}{r | l | l | l}
+    & chyba po chybě & chyba po čisté kontrole & p-value \\
+   \hline
+   všichni závodníci  & 0.08754 & 0.08616 & 0.45022 \\
+   pouze já           & 0.11178 & 0.12385 & 0.66285 \\
+\end{tabular}
+
+Hypotéza dvojchyb evidentně neplatí.
+
 \end{document}
