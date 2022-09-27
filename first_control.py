@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 import datetime
-import math
 import statistics
 from course import SMALL_MISTAKE_THRESHOLD, BIG_MISTAKE_THRESHOLD, Competitor, Course
 from datasets import DK_ORIS_ID, DK_NAME, load_user_races_dataset
-from scipy.stats import norm
+from scipy import stats
 from typing import Callable, List
 
 
@@ -46,34 +45,23 @@ def check_hypothesis(
     while len(control_mistake_probs[-1]) == 0:
         control_mistake_probs.pop()
 
-    control_means = [
-        statistics.mean(probs)
-        for probs in control_mistake_probs
-    ]
-    # print(" ".join(f"{x:.5f}" for x in control_means))
-
     first_control_probs = control_mistake_probs[0]
     other_control_probs = [
         prob for probs in control_mistake_probs[1:]
         for prob in probs
     ]
-    first_control_mean = statistics.mean(first_control_probs)
-    other_control_mean = statistics.mean(other_control_probs)
-    print(f"{first_control_mean=:.5f}")
-    print(f"{other_control_mean=:.5f}")
+    print(f"first_control_mean={statistics.mean(first_control_probs):.5f}")
+    print(f"other_control_mean={statistics.mean(other_control_probs):.5f}")
 
     # null hypothesis: mistake probability is always the same
-    overall_mean = statistics.mean([
-        prob for probs in control_mistake_probs
-        for prob in probs
-    ])
-    var = overall_mean * (1 - overall_mean)
-    # test statistic is the difference of means
-    difference = first_control_mean - other_control_mean
-    difference_var = var * (1 / len(first_control_probs) + 1 / len(other_control_probs))
-    p_value = 1 - norm.cdf(difference, scale=math.sqrt(difference_var))
-    print(f"{p_value=:.5f}")
-    return p_value
+    # use t-test
+    result = stats.ttest_ind(
+        first_control_probs, other_control_probs,
+        alternative="greater"
+    )
+    pvalue = result.pvalue
+    print(f"{pvalue=:.5f}")
+    return pvalue
 
 
 def calculate_mistake_prob(
@@ -89,6 +77,7 @@ def calculate_mistake_prob(
             if c.made_mistake(control, threshold):
                 num_mistakes += 1
     return num_mistakes / num_splits
+
 
 if __name__ == '__main__':
     main()
