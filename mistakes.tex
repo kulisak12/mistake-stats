@@ -6,6 +6,7 @@
 
 \usepackage{a4wide}
 \usepackage{csquotes}
+\usepackage{graphicx}
 \usepackage{hyperref}
 
 \setlength{\parskip}{0.5em}
@@ -186,5 +187,24 @@ volím náhodné veličiny tak, aby z~jednoho závodu vzešlo jedno měření.
 \end{tabular}
 
 Hypotéza dvojchyb evidentně neplatí.
+
+\section*{Historie chyb}
+
+V~poslední řadě se podívám na historii svých chyb. Zajímalo by mě, jestli dělám
+chyb méně než dříve. Zde už poměrně záleží na tom, jaké závody v~datech
+používám. Jednak jsem za ty roky prošel několika kategoriemi, ve kterých
+náročnost tratí roste. Mimo to jezdím častěji na republikové závody, které
+taktéž bývají těžší.
+
+Pro každý závod spočítám, na kolika procentech kontrol jsem udělal chybu. Tuto
+hodnotu vynesu na osu~$y$, za osu~$x$ zvolím pořadové číslo závodu, číslováno
+chronologicky. Nakonec spočítám lineární regresi a~tím zjistím trend chybovosti.
+
+Uvažoval jsem pouze hranici malých chyb. Od mých začátků počet mých chyb klesl
+zhruba na polovinu. Výsledek je vidět v~následujícím grafu:
+
+\begin{center}
+    \includegraphics[width=0.8\textwidth]{history-probs.png}
+\end{center}
 
 \end{document}
