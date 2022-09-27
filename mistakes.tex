@@ -46,9 +46,7 @@ kontrolami, lze použít k~analýze chyb. Pokud je závodníkův čas významně
 než čas ostatních závodníků, dá se předpokládat, že na postupu na danou kontrolu
 udělal chybu.
 
-Stažení dat z~ORISu zajišťuje soubor
-\href{https://github.com/kulisak12/mistake-stats/blob/main/oris.py}{oris.py}.
-Stažená data ukládá na disk, aby se omezil počet požadavků na API.
+Při stahování ukládám data na disk, aby se omezil počet požadavků na API.
 
 \subsection*{Zpracování}
 
@@ -94,14 +92,10 @@ Rozhodl jsem se zavést dvě třídy chyb:
           odpovídá ztrátě $36\,\rm s$, $105\,\rm s$, respektive $225\,\rm s$.
 \end{enumerate}
 
-Výše popsané zajišťuje soubor
-\href{https://github.com/kulisak12/mistake-stats/blob/main/course.py}{course.py}.
-
 \subsection*{Dataset}
 
 Využívám data ze všech závodů do konce srpna~2022, kterých jsem se kdy účastnil.
-Celkem se jedná o~83 závodů. O~načtení se stará soubor
-\href{https://github.com/kulisak12/mistake-stats/blob/main/dataset.py}{dataset.py}.
+Celkem se jedná o~83 závodů.
 
 V~některých statistikách průměruji všechny závodníky dohromady, v~některých
 uvažuji jen své výsledky.
