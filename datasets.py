@@ -5,6 +5,7 @@ from typing import Optional, List
 
 DK_ORIS_ID = 40163
 DK_NAME = "Klement David"
+DK_DATE_TO = datetime.date(2022, 8, 31)
 MIN_COMPETITORS = 3
 
 

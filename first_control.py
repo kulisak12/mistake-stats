@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
-import datetime
 import statistics
 from course import SMALL_MISTAKE_THRESHOLD, BIG_MISTAKE_THRESHOLD, Competitor, Course
-from datasets import DK_ORIS_ID, DK_NAME, load_user_races_dataset
+from datasets import DK_ORIS_ID, DK_NAME, DK_DATE_TO, load_user_races_dataset
 from scipy import stats
 from typing import Callable, List
 
@@ -10,7 +9,7 @@ from typing import Callable, List
 def main():
     courses = load_user_races_dataset(
         DK_ORIS_ID,
-        date_to=datetime.date(2022, 8, 31)
+        date_to=DK_DATE_TO
     )
     for course in courses:
         course.set_adjustments()
