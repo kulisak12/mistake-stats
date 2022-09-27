@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import datetime
 import math
+import statistics
 from course import SMALL_MISTAKE_THRESHOLD, BIG_MISTAKE_THRESHOLD, Competitor, Course
 from datasets import DK_ORIS_ID, DK_NAME, load_user_races_dataset
 from scipy.stats import norm
@@ -26,46 +27,68 @@ def check_hypothesis(
     courses: List[Course],
     threshold: float,
     competitor_predicate: Callable[[Competitor], bool] = lambda _: True
-) -> None:
+) -> float:
     print("##########")
-    competitors = [
-        c
-        for course in courses
-        for c in course.competitors
+    max_controls = max(course.num_controls for course in courses)
+    control_mistake_probs: List[List[float]] = [[] for _ in range(max_controls)]
+    for course in courses:
+        competitors = [
+            c for c in course.competitors
+            if competitor_predicate(c)
+        ]
+        if len(competitors) == 0:
+            continue
+        for control in range(course.num_controls):
+            prob = calculate_mistake_prob(competitors, control, threshold)
+            control_mistake_probs[control].append(prob)
+
+    # because of competitor filtering, some controls might not have any data
+    while len(control_mistake_probs[-1]) == 0:
+        control_mistake_probs.pop()
+
+    control_means = [
+        statistics.mean(probs)
+        for probs in control_mistake_probs
     ]
-    competitors = list(filter(competitor_predicate, competitors))
+    # print(" ".join(f"{x:.5f}" for x in control_means))
 
-    max_controls = max(len(c.losses) for c in competitors)
-    num_mistakes = [0 for _ in range(max_controls)]
-    num_splits = [0 for _ in range(max_controls)]
-    for control in range(max_controls):
-        for c in competitors:
-            if control < len(c.losses):
-                num_splits[control] += 1
-                if c.made_mistake(control, threshold):
-                    num_mistakes[control] += 1
-
-    # print mistake percentages
-    print(" ".join([f"{m / s:.5f}" for m, s in zip(num_mistakes, num_splits)]))
-
-    first_control_mistakes = num_mistakes[0]
-    first_control_splits = num_splits[0]
-    first_control_p = first_control_mistakes / first_control_splits
-    print(f"{first_control_p=:.5f}")
-    other_control_mistakes = sum(num_mistakes[1:])
-    other_control_splits = sum(num_splits[1:])
-    other_control_p = other_control_mistakes / other_control_splits
-    print(f"{other_control_p=:.5f}")
+    first_control_probs = control_mistake_probs[0]
+    other_control_probs = [
+        prob for probs in control_mistake_probs[1:]
+        for prob in probs
+    ]
+    first_control_mean = statistics.mean(first_control_probs)
+    other_control_mean = statistics.mean(other_control_probs)
+    print(f"{first_control_mean=:.5f}")
+    print(f"{other_control_mean=:.5f}")
 
     # null hypothesis: mistake probability is always the same
-    mistake_probability = sum(num_mistakes) / sum(num_splits)
-    var = mistake_probability * (1 - mistake_probability)
+    overall_mean = statistics.mean([
+        prob for probs in control_mistake_probs
+        for prob in probs
+    ])
+    var = overall_mean * (1 - overall_mean)
     # test statistic is the difference of means
-    difference = first_control_p - other_control_p
-    difference_var = var * (1 / first_control_splits + 1 / other_control_splits)
+    difference = first_control_mean - other_control_mean
+    difference_var = var * (1 / len(first_control_probs) + 1 / len(other_control_probs))
     p_value = 1 - norm.cdf(difference, scale=math.sqrt(difference_var))
     print(f"{p_value=:.5f}")
+    return p_value
 
+
+def calculate_mistake_prob(
+    competitors: List[Competitor],
+    control: int,
+    threshold: float
+) -> float:
+    num_splits = 0
+    num_mistakes = 0
+    for c in competitors:
+        if control < len(c.losses):
+            num_splits += 1
+            if c.made_mistake(control, threshold):
+                num_mistakes += 1
+    return num_mistakes / num_splits
 
 if __name__ == '__main__':
     main()
