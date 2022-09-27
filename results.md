@@ -72,8 +72,41 @@ Výše popsané zajišťuje soubor [course.py]().
 
 ### Dataset
 
-Využívám data ze všech závodů, kterých jsem se kdy účastnil. Celkem se jedná o
-83 závodů. O načtení se stará soubor [dataset.py]().
+Využívám data ze všech závodů do konce srpna 2022, kterých jsem se kdy účastnil.
+Celkem se jedná o 83 závodů. O načtení se stará soubor [dataset.py]().
 
 V některých statistikách průměruji všechny závodníky dohromady, v některých
 uvažuji jen své výsledky.
+
+## Hypotéza první kontroly
+
+První kontrola v závodě mnohdy bývá nejzrádnější, neboť závodník ještě není plně
+soustředěný. Osobně mám pocit, že na první kontrolu udělám chybu poměrně často.
+Chci tedy zjistit, jestli tak tomu doopravdy je.
+
+Nulová hypotéza je, že chyby nastávají stejně často na první i na dalších
+kontrolách. Budu zkoumat malé i velké chyby, pro sebe i pro všechny závodníky.
+Použiji Bonferroniho korekci a hladinu významnosti nastavím jako
+$\alpha = 0.05 / 4 = 0.0125$.
+
+Označme $X$ Bernoulliovskou náhodnou veličinu odpovídající chybě na první
+kontrole, $Y$ odpovídající chybě na dalších kontrolách. Testová statistika je
+rozdíl jejich průměrů $\overline{X}_n - \overline{Y}_m$. Dle CLV má tato
+statistika přibližně normální rozdělení, rozptyl odhadnu jako
+$p (1-p) (1/n + 1/m)$, kde $p$ je průměr všech hodnot $X$ a $Y$.
+
+Pro malé chyby a všechny závodníky vychází pro prvních pár kontrol následující
+pravděpodobnosti:
+
+| Kontrola | Pravděpodobnost |
+| -------- | --------------- |
+| 1        | 0.07684         |
+| 2        | 0.06961         |
+| 3        | 0.05972         |
+| 4        | 0.07417         |
+| 5        | 0.06618         |
+
+Na první kontrole bylo 202 chyb z 2 629, na ostatních 2 901 z 46 623. Při
+použití testu výše vychází p-hodnota 0.00149, což by znamenalo, že bych měl
+nulovou hypotézu zamítnout. To je zvláštní, z pravděpodobností výše je vidět, že
+jsou výsledky dost zašuměné.
