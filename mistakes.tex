@@ -1,4 +1,25 @@
-# Chyby v orientačním běhu
+\documentclass[a4paper,11pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[czech]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+
+\usepackage{a4wide}
+\usepackage{csquotes}
+\usepackage{hyperref}
+
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0em}
+
+\title{\Huge Chyby v orientačním běhu}
+\author{David Klement}
+\date{Září 2022}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+\pagebreak
 
 Orientační běh kombinuje dvě dovednosti, rychlý běh a čtení mapy. Závodníci se
 snaží zaběhnout vytyčnou trať co nejrychleji. Časové ztráty mohou pramenit z
@@ -8,13 +29,13 @@ V této práci se zaměřuji na ztráty způsobené chybami a hledám vzory v ni
 se zaměřuji na historii svých vlastních chyb, ze které lze pozorovat průběžný
 zisk zkušeností a vylepšení dovedností vedoucí k omezení chyb.
 
-Zdrojové kódy jsou dostupné v [tomto repozitáři]().
+Zdrojové kódy jsou dostupné v \href{TODO}{tomto repozitáři}.
 
-## Data
+\section*{Data}
 
 Všechny oficiální závody konané v České republice jsou dohledatelné v systému
-[ORIS](https://oris.orientacnisporty.cz/?sport=1). Tento systém poskytuje
-[API](https://oris.orientacnisporty.cz/API), prostřednictvím kterého je možné
+\href{https://oris.orientacnisporty.cz/?sport=1}{ORIS}. Tento systém poskytuje
+\href{https://oris.orientacnisporty.cz/API}{API}, prostřednictvím kterého je možné
 data ze závodů získat.
 
 U většiny závodů jsou dostupné mezičasy, tedy informace, v jakém čase doběhl
@@ -23,10 +44,10 @@ kontrolami, lze použít k analýze chyb. Pokud je závodníkův čas významně
 než čas ostatních závodníků, dá se předpokládat, že na postupu na danou kontrolu
 udělal chybu.
 
-Stažení dat z ORISu zajišťuje soubor [oris.py](). Stažená data ukládá na disk,
+Stažení dat z ORISu zajišťuje soubor \href{TODO}{oris.py}. Stažená data ukládá na disk,
 aby se omezil počet požadavků na API.
 
-### Zpracování
+\subsection*{Zpracování}
 
 Stažené mezičasy je nutné trochu zpracovat. Někteří závodníci totiž závod
 nemuseli dokončit, případně některou kontrolu mohli vynechat. Poté nejsou
@@ -36,7 +57,7 @@ kontrolu. Pro jednoduchost tyto závodníky z dat plně odstraňuji.
 Do dat přidávám pouze ty závody, které dokončili alespoň 3 závodníci. Pro 2
 závodníky totiž nelze rozlišit přirozený rozptyl časů od chyb.
 
-### Detekce chyb
+\subsection*{Detekce chyb}
 
 Není nijak definováno, co chyba je a co není. Pokusil jsem se tedy vytvořit
 systém, který dle mého rozumně odpovídá skutečnosti.
@@ -62,23 +83,26 @@ zatímco ve sprintu se již jedná o hrubou chybu. Dává tedy smysl uvažovat z
 v poměru k délce závodu.
 
 Rozhodl jsem se zavést dvě třídy chyb:
-- Malé chyby, u kterých ztráta na postupu převyšuje 1/50 délky závodu. To by
-  podle oficiálních směrných časů v kategorii H21 znamenalo 14 s na sprintu, 42
-  s na krátké trati a 90 s na klasické trati.
-- Velké chyby, u kterých ztráta převyšuje 1/20 délky závodu, což odpovídá ztrátě
-  36 s, 105 s, respektive 225 s.
+\begin{enumerate}
+    \item Malé chyby, u kterých ztráta na postupu převyšuje $1/50$ délky závodu.
+    To by podle oficiálních směrných časů v kategorii H21 znamenalo $14\,\rm s$
+    na sprintu, $42\,\rm s$ na krátké trati a $90\,\rm s$ na klasické trati.
+    \item Velké chyby, u kterých ztráta převyšuje $1/20$ délky závodu, což
+    odpovídá ztrátě $36\,\rm s$, $105\,\rm s$, respektive $225\,\rm s$.
+\end{enumerate}
 
-Výše popsané zajišťuje soubor [course.py]().
+Výše popsané zajišťuje soubor \href{TODO}{course.py}.
 
-### Dataset
+\subsection*{Dataset}
 
 Využívám data ze všech závodů do konce srpna 2022, kterých jsem se kdy účastnil.
-Celkem se jedná o 83 závodů. O načtení se stará soubor [dataset.py]().
+Celkem se jedná o 83 závodů. O načtení se stará soubor \href{TODO}{dataset.py}.
 
 V některých statistikách průměruji všechny závodníky dohromady, v některých
 uvažuji jen své výsledky.
+\pagebreak
 
-## Hypotéza první kontroly
+\section*{Hypotéza první kontroly}
 
 První kontrola v závodě mnohdy bývá nejzrádnější, neboť závodník ještě není plně
 soustředěný. Osobně mám pocit, že na první kontrolu udělám chybu poměrně často.
@@ -98,15 +122,20 @@ $p (1-p) (1/n + 1/m)$, kde $p$ je průměr všech hodnot $X$ a $Y$.
 Pro malé chyby a všechny závodníky vychází pro prvních pár kontrol následující
 pravděpodobnosti:
 
-| Kontrola | Pravděpodobnost |
-| -------- | --------------- |
-| 1        | 0.07684         |
-| 2        | 0.06961         |
-| 3        | 0.05972         |
-| 4        | 0.07417         |
-| 5        | 0.06618         |
+\begin{tabular}{c | c}
+    Kontrola & Pravděpodobnost \\
+    \hline
+    1        & 0.07684         \\
+    2        & 0.06961         \\
+    3        & 0.05972         \\
+    4        & 0.07417         \\
+    5        & 0.06618         \\
+\end{tabular}
 
-Na první kontrole bylo 202 chyb z 2 629, na ostatních 2 901 z 46 623. Při
+Na první kontrole bylo 202 chyb z 2\,629, na ostatních 2\,901 z 46\,623. Při
 použití testu výše vychází p-hodnota 0.00149, což by znamenalo, že bych měl
 nulovou hypotézu zamítnout. To je zvláštní, z pravděpodobností výše je vidět, že
 jsou výsledky dost zašuměné.
+
+
+\end{document}

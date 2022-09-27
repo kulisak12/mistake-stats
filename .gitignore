@@ -1,3 +1,12 @@
+# Python
 __pycache__/
 .mypy_cache/
+
+# LaTeX
+*.aux
+*.log
+*.out
+*.pdf
+
+# Project
 oris-cache/
