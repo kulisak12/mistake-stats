@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 import datetime
 import math
-from course import SMALL_MISTAKE_THRESHOLD, BIG_MISTAKE_THRESHOLD
+from course import SMALL_MISTAKE_THRESHOLD, BIG_MISTAKE_THRESHOLD, Competitor, Course
 from datasets import DK_ORIS_ID, DK_NAME, load_user_races_dataset
 from scipy.stats import norm
-from typing import List
+from typing import Callable, List
 
 
 def main():
@@ -16,12 +16,24 @@ def main():
         course.set_adjustments()
         course.calculate_losses()
 
+    check_hypothesis(courses, SMALL_MISTAKE_THRESHOLD)
+    check_hypothesis(courses, BIG_MISTAKE_THRESHOLD)
+    check_hypothesis(courses, SMALL_MISTAKE_THRESHOLD, lambda x: x.name == DK_NAME)
+    check_hypothesis(courses, BIG_MISTAKE_THRESHOLD, lambda x: x.name == DK_NAME)
+
+
+def check_hypothesis(
+    courses: List[Course],
+    threshold: float,
+    competitor_predicate: Callable[[Competitor], bool] = lambda _: True
+) -> None:
+    print("##########")
     competitors = [
         c
         for course in courses
         for c in course.competitors
     ]
-    competitors = list(filter(lambda x: x.name == DK_NAME, competitors))
+    competitors = list(filter(competitor_predicate, competitors))
 
     max_controls = max(len(c.losses) for c in competitors)
     num_mistakes = [0 for _ in range(max_controls)]
@@ -30,7 +42,7 @@ def main():
         for c in competitors:
             if control < len(c.losses):
                 num_splits[control] += 1
-                if c.made_mistake(control, SMALL_MISTAKE_THRESHOLD):
+                if c.made_mistake(control, threshold):
                     num_mistakes[control] += 1
 
     # print mistake percentages
